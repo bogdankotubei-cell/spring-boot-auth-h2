@@ -1,0 +1,23 @@
+package com.example.auth;
+
+import org.springframework.stereotype.Service;
+import java.util.Optional;
+
+@Service
+public class AuthService {
+    private final UserRepository repo;
+    public AuthService(UserRepository repo) { this.repo = repo; }
+
+    public User register(User user) {
+        System.out.println("Register: " + user.getUsername());
+        return repo.save(user);
+    }
+
+    public boolean login(String username, String password) {
+        System.out.println("Login attempt: " + username);
+        Optional<User> u = repo.findByUsername(username);
+        boolean ok = u.isPresent() && u.get().getPassword().equals(password);
+        System.out.println(ok ? "Login OK" : "Login FAIL");
+        return ok;
+    }
+}
